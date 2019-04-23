@@ -1,0 +1,97 @@
+﻿@inherits System.Web.Mvc.WebViewPage<Verndale.RedirectManager.Models.RedirectManagerModel>
+@using System.Web.Mvc.Html
+@using System.Web.Mvc
+@using System.Web.UI.WebControls
+@using EPiServer.Framework.Web.Mvc.Html
+
+@{
+    Layout = null;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>
+
+    </title>
+    <!-- Mimic Internet Explorer 7 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    @Html.CssLink(EPiServer.Shell.Paths.ToClientResource("Shell", "ClientResources/epi/themes/legacy/ShellCore.css"))
+    @Html.CssLink(EPiServer.Shell.Paths.ToClientResource("Shell", "ClientResources/epi/themes/legacy/ShellCoreLightTheme.css"))
+    @Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("Shell", "ClientResources/ShellCore.js"))
+    @Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/ReportCenter/ReportCenter.js"))
+
+    <link href="../../../App_Themes/Default/Styles/system.css" type="text/css" rel="stylesheet" />
+    <link href="../../../App_Themes/Default/Styles/ToolButton.css" type="text/css" rel="stylesheet" />
+</head>
+<body id="body">
+
+    @using (Html.BeginForm("SaveRedirect", "RedirectManager"))
+    {
+
+        <script src="/EPiServer/CMS/javascript/system.js" type="text/javascript"></script>
+
+        <div class="epi-contentContainer epi-padding">
+            <div class="epi-contentArea">
+                <h1 class="EP-prefix">
+                    Add Redirect Entry
+                </h1>
+            </div>
+
+            <div class="epi-formArea">
+                <div class="epi-size10">
+                    <div>
+                        <label for="OldUrl">Old Url</label>
+                        <div id="OldUrl" class="epiinputdate" style="display: inline;">
+                            @Html.TextBoxFor(p => p.OldUrl, new { size = "80", style = "display: inline;" })
+                        </div>
+                    </div>
+                    <div>
+                        <label for="NewUrl">New Url</label>
+                        <div id="NewUrl" class="epiinputdate" style="display: inline;">
+                            @Html.TextBoxFor(p => p.NewUrl, new { size = "80", style = "display: inline;" })
+                        </div>
+                    </div>
+                    <div>
+                        <label for="IncludeQuery">Include query values</label>
+                        <div id="IncludeQuery" class="epiinputdate" style="display: inline;">
+                            @Html.CheckBoxFor(p => p.IncludeQuery)
+                        </div>
+                    </div>
+                    <div>
+                        @{
+                            var listItems = new List<ListItem>
+                                                                        {
+                                                                            new ListItem {Text = "301", Value = "301"},
+                                                                            new ListItem {Text = "302", Value = "302"}
+                                                                        };
+                        }
+                        <label for="type">Type</label>
+                        @Html.DropDownList("type", new SelectList(listItems, "Value", "Text", Model.Type), new { @class = "episize240" })
+                    </div>
+
+                    <div class="epi-buttonContainer">
+                        @if (!string.IsNullOrEmpty(Model.NewUrl))
+                        {
+                            <span class="epi-cmsButton">
+                                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Delete" onclick="location.href = '@Url.Action("Remove", "RedirectManager", new {id = Model.Id})';" type="button" value="Delete" title="Delete" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" />
+                            </span>
+                        }
+
+                        <span class="epi-cmsButton">
+                            <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save" type="submit" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" />
+                        </span>
+                        <span class="epi-cmsButton">
+                            <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Refresh" onclick="location.href = '@Url.Action("Index", "RedirectManager")';" type="button" value="Go back to Import Data" title="Go back to Import Data" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" />
+                        </span>
+                    </div>
+
+                    <div class="epi-paddingVertical-small">
+                        <p>The field Old Url accepts regular expression; for intance, <code>[\bTest\b]</code></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+</body>
+</html>

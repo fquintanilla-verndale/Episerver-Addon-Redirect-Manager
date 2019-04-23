@@ -1,0 +1,65 @@
+﻿@inherits System.Web.Mvc.WebViewPage<Verndale.RedirectManager.ViewModels.ImportResultViewModel>
+@using System.Web.Mvc.Html
+@using System.Web.Mvc
+@using EPiServer.Framework.Web.Mvc.Html
+
+@{
+    Layout = null;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>
+        ImportData
+    </title>
+    <!-- Mimic Internet Explorer 7 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+
+    @Html.CssLink(EPiServer.Shell.Paths.ToClientResource("Shell", "ClientResources/epi/themes/legacy/ShellCore.css"))
+    @Html.CssLink(EPiServer.Shell.Paths.ToClientResource("Shell", "ClientResources/epi/themes/legacy/ShellCoreLightTheme.css"))
+    @Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("Shell", "ClientResources/ShellCore.js"))
+    @Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/ReportCenter/ReportCenter.js"))
+
+    <link href="../../../App_Themes/Default/Styles/system.css" type="text/css" rel="stylesheet" />
+    <link href="../../../App_Themes/Default/Styles/ToolButton.css" type="text/css" rel="stylesheet" />
+</head>
+<body id="body">
+
+    <div class="epi-contentContainer epi-padding">
+        <div class="epi-contentArea">
+            <h1 class="EP-prefix">
+                Import Data
+            </h1>
+        </div>
+
+        <p>
+            Number of redirect Urls:
+            <span id="FullRegion_MainRegion_PageCount">@Model.TotalImported</span>
+        </p>
+
+        <p>
+            Number of wrong Urls:
+            <span id="FullRegion_MainRegion_PageCount">@Model.TotalErrors</span>
+        </p>
+
+        @if (Model.TotalErrors > 0)
+        {
+            <div class="EP-systemMessage EP-systemMessage-Warning">
+                The following errors have occurred:<br />
+                @foreach (var item in Model.ImportErrorItems)
+                {
+                    @:Line @item.Line: @item.Message <br />
+                }
+            </div>
+        }
+
+        <div class="epi-buttonContainer">
+            <span class="epi-cmsButton">
+                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Refresh" onclick="location.href = '@Url.Action("Index", "RedirectManager")';" type="button" value="Go back to Import Data" title="Go back to Import Data" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" />
+            </span>
+        </div>
+
+    </div>
+
+</body>
+</html>

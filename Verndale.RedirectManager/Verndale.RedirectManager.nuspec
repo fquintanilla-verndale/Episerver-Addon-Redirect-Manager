@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Verndale.RedirectManager</id>
+    <version>$version$</version>
+    <title>Redirect Manager</title>
+    <authors>Verndale</authors>
+    <owners />
+    <iconUrl>http://world.episerver.com/PageFiles/3/Icons/Nuget.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Creating 301 redirects from decommissioned URLs to currently active pages.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2019</copyright>
+    <tags>EPiServer Verndale Package Cache</tags>
+  </metadata>
+  <files>
+    <file src="bin\Verndale.RedirectManager.dll" target="lib\net46\" />
+    <file src="bin\Verndale.RedirectManager.dll" target="lib\net47\" />
+    <file src="Modules\_protected\Verndale.RedirectManager\Verndale.RedirectManager.zip" target="content\Modules\_protected\Verndale.RedirectManager\"/>
+    <file src="Readme.txt" target="" />
+  </files>
+</package>

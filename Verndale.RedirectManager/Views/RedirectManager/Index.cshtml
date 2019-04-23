@@ -1,0 +1,210 @@
+﻿@inherits System.Web.Mvc.WebViewPage<Verndale.RedirectManager.ViewModels.RedirectViewModel>
+@using System.Web.Mvc.Html
+@using System.Web.Mvc
+@using EPiServer.Framework.Web.Mvc.Html
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>
+        Redirect Manager
+    </title>
+    <!-- Mimic Internet Explorer 7 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+
+    @Html.CssLink(EPiServer.Shell.Paths.ToClientResource("Shell", "ClientResources/epi/themes/legacy/ShellCore.css"))
+    @Html.CssLink(EPiServer.Shell.Paths.ToClientResource("Shell", "ClientResources/epi/themes/legacy/ShellCoreLightTheme.css"))
+    @Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("Shell", "ClientResources/ShellCore.js"))
+    @Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/ReportCenter/ReportCenter.js"))
+
+    <link href="../../../App_Themes/Default/Styles/system.css" type="text/css" rel="stylesheet" />
+    <link href="../../../App_Themes/Default/Styles/ToolButton.css" type="text/css" rel="stylesheet" />
+
+
+</head>
+<body id="body">
+
+    <div class="aspNetHidden">
+        <input type="hidden" name="Tab1" id="Tab1" value="" />
+        <input type="hidden" name="Tab2" id="Tab2" value="" />
+        <input type="hidden" name="Tab3" id="Tab3" value="" />
+    </div>
+
+    <script src="/Util/javascript/episerverscriptmanager.js" type="text/javascript"></script>
+    <script src="/EPiServer/CMS/javascript/system.js" type="text/javascript"></script>
+    <script src="/EPiServer/CMS/javascript/dialog.js" type="text/javascript"></script>
+    <script src="/EPiServer/CMS/javascript/system.aspx" type="text/javascript">
+    </script>
+
+    <style>
+        .epi-contentContainer {
+            max-width: auto;
+        }
+    </style>
+
+    <div class="epi-contentContainer epi-padding">
+        <div class="epi-contentArea">
+            <h1 class="EP-prefix">
+                Redirect Manager
+            </h1>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div id="FullRegion_ValidationSummary" class="EP-validationSummary" style="color: Black;">
+                    @Html.ValidationSummary()
+                </div>
+            }
+        </div>
+
+        <div class="epi-buttonDefault">
+            <span class="epi-cmsButton">
+                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Add" onclick="location.href = '@Url.Action("Add", "RedirectManager")';" type="button" name="AddRedirect" id="AddRedirect" value="Add Redirect" title="Add Redirect" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" />
+            </span>
+            <span class="epi-cmsButton">
+                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Delete" onclick="deleteAll();" type="button" value="Delete All" title="Delete All" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" />
+            </span>
+        </div>
+        
+        <script>
+            function deleteAll() {
+                if (confirm("Are you sure you want to clear all data from the redirect manager?")) {
+                    location.href = '@Url.Action("RemoveAll", "RedirectManager")';
+                } 
+            }
+        </script>
+
+        <div class="epi-tabView">
+            <ul class="epi-tabView-navigation">
+                <li id="FullRegion_MainRegion_actionTab_Tab1" onclick="EPi.Tab.Click(this, 'FullRegion_MainRegion_GeneralTable', 'Tab1', oFullRegion_MainRegion_actionTab);return false;" class="epi-tabView-navigation-item-selected">
+                    <a class="epi-tabView-tab" href="javascript:void(0)" target="_self">Redirects</a>
+                </li>
+                <li id="FullRegion_MainRegion_actionTab_Tab2" onclick="EPi.Tab.Click(this, 'FullRegion_MainRegion_EditingTable', 'Tab2', oFullRegion_MainRegion_actionTab);return false;" class="epi-tabView-navigation-item">
+                    <a class="epi-tabView-tab" href="javascript:void(0)" target="_self">Import</a>
+                </li>
+                <li id="FullRegion_MainRegion_actionTab_Tab3" onclick="EPi.Tab.Click(this, 'FullRegion_MainRegion_Export', 'Tab3', oFullRegion_MainRegion_actionTab);return false;" class="epi-tabView-navigation-item">
+                    <a class="epi-tabView-tab" href="javascript:void(0)" target="_self">Export</a>
+                </li>
+            </ul>
+        </div>
+
+        <script type='text/javascript'>
+            var oFullRegion_MainRegion_actionTab = new EPi.Tab.Control("FullRegion_MainRegion_actionTab_Tab1",
+                "FullRegion_MainRegion_GeneralTable",
+                "Tab1");
+        </script>
+
+        <div id="FullRegion_MainRegion_tabView" class="epi-padding">
+
+            <div id="FullRegion_MainRegion_GeneralTable" class="epi-formArea" style="display: block;">
+
+                @using (Html.BeginForm("Search", "RedirectManager"))
+                {
+                    @Html.Hidden("page", 1)
+
+                    <div class="epi-formArea">
+                        <div class="epi-size10">
+                            <div>
+                                <label for="FullRegion_MainRegion_ChangedByTextBox">Search</label>
+                                <input name="term" type="text" id="term" value="@Model.Term" class="episize500" />
+                            </div>
+
+                            <div class="epi-indent">
+                                <span class="epi-cmsButton">
+                                    <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Search" type="submit" value="Search" title="Search" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" />
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+                <table class="epi-default epi-marginVertical" cellpadding="0">
+                    <tbody>
+                        <tr>
+                            <th>
+                                Old Url
+                            </th>
+                            <th>
+                                New Url
+                            </th>
+                            <th>
+                                Type
+                            </th>
+                        </tr>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("Edit", "RedirectManager", new {id = item.Id})">@item.OldUrl</a>
+                                </td>
+                                <td>@item.NewUrl</td>
+                                <td>@item.Type</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+                <div>
+                    <span class="@(Model.HasPreviousPage ? "epi-cmsButton" : "epi-cmsButtondisabled")">
+                        <input onclick="window.location = '@Url.Action("Search", "RedirectManager")?term=@Model.Term&page=@(Model.PageNumber - 1)';" @(Model.HasPreviousPage ? "" : "disabled")=) class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-ArrowLeft" type="button" value="Previous" title="Previous" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" />
+                    </span>
+                    <span class="@(Model.HasNextPage ? "epi-cmsButton" : "epi-cmsButtondisabled")">
+                        <input onclick="window.location = '@Url.Action("Search", "RedirectManager")?term=@Model.Term&page=@(Model.PageNumber + 1)';" @(Model.HasNextPage ? "" : "disabled")=) class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-ArrowRight" type="button" value="Next" title="Next" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" />
+                    </span>
+                </div>
+
+            </div>
+
+            <div id="FullRegion_MainRegion_EditingTable" class="epi-formArea" style="display: none;">
+                @using (Html.BeginForm("Import", "RedirectManager", FormMethod.Post, new { enctype = "multipart/form-data", name = "exportForm" }))
+                {
+                    <div class="epi-formArea">
+                        <div class="epi-size30 epi-paddingVertical-small">
+                            <div>
+                                <label for="FullRegion_MainRegion_File1">Select an CSV tab delimited file and upload</label>
+                                <input type="file" id="fileUpload" name="file" size="23" />
+                            </div>
+                        </div>
+
+                        <img id="FullRegion_MainRegion_ProgressPicture" title="Import is in progress..." src="/App_Themes/Default/Images/General/AjaxLoader.gif" style="display: none" />
+
+
+                        <div class="epi-buttonContainer">
+                            <span class="epi-cmsButton">
+                                <input onclick="submitForm();" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Import" type="button" name="ImportFile" id="FullRegion_MainRegion_ImportFile" value="Begin Import" title="Begin Import" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" />
+                            </span>
+                        </div>
+                    </div>
+
+                    <script>
+                        function submitForm() {
+                            document.getElementById('FullRegion_MainRegion_ProgressPicture').style.display = '';
+                            document.exportForm.submit();
+                        }
+                    </script>
+                }
+
+            </div>
+
+            <div id="FullRegion_MainRegion_Export" class="epi-formArea" style="display: none;">
+                <div class="epi-contentArea">
+                    <p class="EP-systemInfo">Export data from Redirect Manager to a CSV file.</p>
+                </div>
+
+                <div class="epi-buttonContainer">
+                    <span class="epi-cmsButton">
+                        <input onclick="window.location = '@Url.Action("Export", "RedirectManager")';" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Export" type="button" value="Export" title="Export" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" />
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
