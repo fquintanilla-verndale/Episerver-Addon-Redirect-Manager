@@ -51,7 +51,7 @@ namespace Verndale.RedirectManager.Initialization
             if (redirect != null)
             {
                 LogDebug("Handled URL", context);
-                var newUrl = redirect.NewUrl;
+                var newUrl = redirect.NewUrl.Trim();
 
                 if (!newUrl.Contains("http"))
                 {
