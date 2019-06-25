@@ -18,6 +18,7 @@ namespace Verndale.RedirectManager.Initialization
         private static readonly ILogger Logger = LogManager.GetLogger();
 
         private static Injected<RequestHandler> RequestHandler { get; set; }
+        private static Injected<ErrorHandler> ErrorHandler { get; set; }
 
         public void Initialize(InitializationEngine context)
         {
@@ -36,6 +37,7 @@ namespace Verndale.RedirectManager.Initialization
         {
             Logger.Debug("Start InitializeHttpEvents()");
 
+            application.Error += OnError;
             application.EndRequest += OnEndRequest;
         }
 
@@ -45,6 +47,27 @@ namespace Verndale.RedirectManager.Initialization
             {
                 Logger.Debug("Start OnEndRequest()");
                 RequestHandler.Service.Handle(GetContext());
+            }
+            catch (HttpException e)
+            {
+                Logger.Warning("Http error (headers already written or similar) on 404 handling.", e);
+            }
+            catch (Exception e)
+            {
+                Logger.Error("Error on 404 handling.", e);
+                throw;
+            }
+        }
+
+        private void OnError(object sender, EventArgs eventArgs)
+        {
+            try
+            {
+                ErrorHandler.Service.Handle(GetContext());
+            }
+            catch (HttpException e)
+            {
+                Logger.Warning("Http error (headers already written or similar) on 404 handling.", e);
             }
             catch (Exception e)
             {

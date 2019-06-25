@@ -64,7 +64,7 @@ namespace Verndale.RedirectManager.Initialization
                 }
 
                 Logger.Debug("New absolute Url: " + newUrl);
-
+                
                 if (redirect.Type == 301)
                 {
                     context

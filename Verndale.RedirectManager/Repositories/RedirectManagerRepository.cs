@@ -69,7 +69,8 @@ namespace Verndale.RedirectManager.Repositories
                 return null;
             }
 
-            var sql = $"SELECT * FROM RedirectManager WHERE '{oldUrl}' like '%' + OldUrl + '%'";
+            var sql = $"SELECT * FROM RedirectManager WHERE '{oldUrl}' like '%' + OldUrl + '%' " +
+                      $"ORDER BY CASE WHEN OldUrl = '{oldUrl}' THEN 0 ELSE 1 END";
 
             Logger.Debug($"SQL: {sql}");
 
@@ -104,7 +105,7 @@ namespace Verndale.RedirectManager.Repositories
         public int RemoveAndInsert(RedirectManagerModel model)
         {
             var sql = $"delete from RedirectManager where OldUrl = '{model.OldUrl}'; " +
-                      $"insert into RedirectManager values ('{model.OldUrl}', '{model.NewUrl}', {model.Type})";
+                      $"insert into RedirectManager values ('{model.OldUrl}', '{model.NewUrl}', {model.Type}, {(model.IncludeQuery ? 1 : 0)})";
 
             Logger.Debug("Start RemoveAndInsert()");
             Logger.Debug($"SQL: {sql}");

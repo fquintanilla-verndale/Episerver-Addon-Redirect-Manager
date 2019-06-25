@@ -44,7 +44,7 @@ namespace Verndale.RedirectManager.Initialization
                          [OldUrl] nvarchar(800) not null,  
                          [NewUrl] nvarchar(800) not null,
                          [RedirectType] int not null,
-                         [IncludeQuery] bit
+                         [IncludeQuery] bit default 1
                     );
                     create index idx_oldurl on RedirectManager(OldUrl);
                 end";
