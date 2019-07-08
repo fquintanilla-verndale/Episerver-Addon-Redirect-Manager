@@ -13,6 +13,8 @@ namespace Verndale.RedirectManager.ViewModels
             Items = new List<RedirectManagerModel>();
         }
 
+        public string SelectedTab { get; set; }
+
         public string Term { get; set; }
 
         public int PageNumber { get; set; }

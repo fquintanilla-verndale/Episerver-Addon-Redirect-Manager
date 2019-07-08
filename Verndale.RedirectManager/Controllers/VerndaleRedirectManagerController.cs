@@ -33,11 +33,11 @@ namespace Verndale.RedirectManager.Controllers
 
         #endregion
 
-        public ActionResult Index()
+        public ActionResult Index(string tab)
         {
             Logger.Debug($"Begin Index()");
 
-            var model = CreateRedirectModel(null, 1);
+            var model = CreateRedirectModel(null, 1, tab);
             return View(GetViewLocation("Index"), model);
         }
 
@@ -45,7 +45,7 @@ namespace Verndale.RedirectManager.Controllers
         {
             Logger.Debug($"Begin Search({term ?? "NULL"}, {page})");
 
-            var model = CreateRedirectModel(term, page);
+            var model = CreateRedirectModel(term, page, "");
             return View(GetViewLocation("Index"), model);
         }
 
@@ -225,13 +225,13 @@ namespace Verndale.RedirectManager.Controllers
             }
 
             return !ModelState.IsValid
-                ? View(GetViewLocation("Index"), CreateRedirectModel(string.Empty, 1))
+                ? View(GetViewLocation("Index"), CreateRedirectModel(string.Empty, 1, ""))
                 : View(GetViewLocation("ImportAndValidate"), resultModel);
         }
 
         #region Private Methods
 
-        private RedirectViewModel CreateRedirectModel(string term, int page)
+        private RedirectViewModel CreateRedirectModel(string term, int page, string selectedTab)
         {
 
             var items = _redirectManagerRepository.GetAll(term, page, RedirectViewModel.PageSize).ToList();
@@ -245,7 +245,8 @@ namespace Verndale.RedirectManager.Controllers
                 Term = term,
                 PageNumber = page,
                 TotalItems = totalItems,
-                Items = items
+                Items = items,
+                SelectedTab = selectedTab
             };
         }
 

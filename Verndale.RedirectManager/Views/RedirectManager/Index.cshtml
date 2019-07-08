@@ -77,16 +77,35 @@
                 } 
             }
         </script>
+        
+        @{
+            var selected1 = "";
+            var selected2 = "";
+            var selected3 = "";
+
+            if (Model.SelectedTab == "2")
+            {
+                selected2 = "-selected";
+            }
+            else if (Model.SelectedTab == "3")
+            {
+                selected3 = "-selected";
+            }
+            else
+            {
+                selected1 = "-selected";
+            }
+        }
 
         <div class="epi-tabView">
             <ul class="epi-tabView-navigation">
-                <li id="FullRegion_MainRegion_actionTab_Tab1" onclick="EPi.Tab.Click(this, 'FullRegion_MainRegion_GeneralTable', 'Tab1', oFullRegion_MainRegion_actionTab);return false;" class="epi-tabView-navigation-item-selected">
+                <li id="FullRegion_MainRegion_actionTab_Tab1" onclick="EPi.Tab.Click(this, 'FullRegion_MainRegion_GeneralTable', 'Tab1', oFullRegion_MainRegion_actionTab);return false;" class="epi-tabView-navigation-item@(selected1)">
                     <a class="epi-tabView-tab" href="javascript:void(0)" target="_self">Redirects</a>
                 </li>
-                <li id="FullRegion_MainRegion_actionTab_Tab2" onclick="EPi.Tab.Click(this, 'FullRegion_MainRegion_EditingTable', 'Tab2', oFullRegion_MainRegion_actionTab);return false;" class="epi-tabView-navigation-item">
+                <li id="FullRegion_MainRegion_actionTab_Tab2" onclick="EPi.Tab.Click(this, 'FullRegion_MainRegion_EditingTable', 'Tab2', oFullRegion_MainRegion_actionTab);return false;" class="epi-tabView-navigation-item@(selected2)">
                     <a class="epi-tabView-tab" href="javascript:void(0)" target="_self">Import</a>
                 </li>
-                <li id="FullRegion_MainRegion_actionTab_Tab3" onclick="EPi.Tab.Click(this, 'FullRegion_MainRegion_Export', 'Tab3', oFullRegion_MainRegion_actionTab);return false;" class="epi-tabView-navigation-item">
+                <li id="FullRegion_MainRegion_actionTab_Tab3" onclick="EPi.Tab.Click(this, 'FullRegion_MainRegion_Export', 'Tab3', oFullRegion_MainRegion_actionTab);return false;" class="epi-tabView-navigation-item@(selected3)">
                     <a class="epi-tabView-tab" href="javascript:void(0)" target="_self">Export</a>
                 </li>
             </ul>
