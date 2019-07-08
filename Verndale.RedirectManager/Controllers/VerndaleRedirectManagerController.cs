@@ -13,6 +13,7 @@ using Shell = EPiServer.Shell;
 
 namespace Verndale.RedirectManager.Controllers
 {
+    [Authorize(Roles = "Administrators,WebAdmins")]
     [GuiPlugIn(Area = PlugInArea.AdminMenu, UrlFromModuleFolder = "RedirectManager", DisplayName = "Redirect Manager")]
     public class VerndaleRedirectManagerController : Controller
     {
