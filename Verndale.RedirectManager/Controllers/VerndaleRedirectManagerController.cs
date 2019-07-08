@@ -41,6 +41,7 @@ namespace Verndale.RedirectManager.Controllers
             return View(GetViewLocation("Index"), model);
         }
 
+        [ValidateInput(false)]
         public ActionResult Search(string term, int page)
         {
             Logger.Debug($"Begin Search({term ?? "NULL"}, {page})");
