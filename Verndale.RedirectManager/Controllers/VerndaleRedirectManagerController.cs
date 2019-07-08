@@ -145,7 +145,12 @@ namespace Verndale.RedirectManager.Controllers
 
             var resultModel = new ImportResultViewModel();
 
-            if (model.File.ContentType != "application/vnd.ms-excel")
+            if (Request.Files.Count == 0 || model.File == null)
+            {
+                Logger.Warning($"File is empty.");
+                ModelState.AddModelError(string.Empty, "Please select a file.");
+            }
+            else if (model.File.ContentType != "application/vnd.ms-excel")
             {
                 Logger.Warning($"File format {model.File.ContentType} is not supported");
                 ModelState.AddModelError(string.Empty, "Only CSV files are accepted.");
